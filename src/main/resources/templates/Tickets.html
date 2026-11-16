@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Tickets – Helpdesk</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 32px;
+            background: #1e3a5f;
+            color: #ffffff;
+        }
+        nav .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        nav .user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+        }
+        nav form { margin: 0; }
+        nav button {
+            padding: 6px 14px;
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        nav button:hover { background: rgba(255, 255, 255, 0.15); }
+        main {
+            max-width: 1000px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        h1 { color: #1e3a5f; }
+        .btn {
+            padding: 10px 18px;
+            background: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .btn:hover { background: #1d4ed8; }
+        .card {
+            background: #ffffff;
+            border: 1px solid #d1d9e6;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5eaf1;
+        }
+        th {
+            background: #f5f7fb;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #5b6b82;
+        }
+        tr:last-child td { border-bottom: none; }
+        td a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        td a:hover { text-decoration: underline; }
+        .status {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e5eaf1;
+        }
+        .empty {
+            padding: 32px;
+            text-align: center;
+            color: #5b6b82;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="brand">Helpdesk</span>
+    <div class="user">
+        <span>Logged in as <strong sec:authentication="name"></strong></span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+
+<main>
+    <div class="header">
+        <h1>Tickets</h1>
+        <a class="btn" th:href="@{/tickets/new}">+ New ticket</a>
+    </div>
+
+    <div class="card">
+        <table th:if="${!tickets.isEmpty()}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Created by</th>
+                <th>Assigned to</th>
+                <th>Created</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ticket : ${tickets}">
+                <td th:text="${ticket.id}"></td>
+                <td><a th:href="@{/tickets/{id}(id=${ticket.id})}" th:text="${ticket.title}"></a></td>
+                <td><span class="status" th:text="${ticket.status}"></span></td>
+                <td th:text="${ticket.creator.username}"></td>
+                <td th:text="${ticket.assignee != null ? ticket.assignee.username : '-'}"></td>
+                <td th:text="${#temporals.format(ticket.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p class="empty" th:if="${tickets.isEmpty()}">No tickets
