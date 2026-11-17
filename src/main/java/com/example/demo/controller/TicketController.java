@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -22,6 +23,12 @@ public class TicketController {
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
     }
+
+    @GetMapping("/")
+    public String index() {
+            return  "redirect:/tickets";
+    }
+
 
     @GetMapping("/tickets")
     public String tickets(Principal principal, Model model) {
@@ -46,5 +53,12 @@ public class TicketController {
 
         ticketService.createTicket(form, principal.getName());
         return "redirect:/tickets";
+    }
+
+    @GetMapping("/tickets/{id}")
+    public String showTicket(@PathVariable Long id, Principal principal, Model model) {
+        Ticket ticket = ticketService.getTicket(id, principal.getName());
+        model.addAttribute("ticket", ticket);
+        return "ticket-details";
     }
 }
