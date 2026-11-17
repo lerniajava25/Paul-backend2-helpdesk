@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.CreateTicketForm;
 import com.example.demo.model.Role;
 import com.example.demo.model.Ticket;
 import com.example.demo.model.User;
@@ -30,5 +31,17 @@ public class TicketService {
         }
 
         return ticketRepository.findAll();
+    }
+
+    public Ticket createTicket (CreateTicketForm form, String username) {
+        User user =  userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        Ticket ticket = new Ticket();
+        ticket.setTitle(form.getTitle());
+        ticket.setDescription(form.getDescription());
+
+        ticket.setCreator(user);
+
+        return  ticketRepository.save(ticket);
     }
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>New ticket – Helpdesk</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; color: #1f2937; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; background: #1e3a5f; color: #fff; }
+    nav .brand { font-size: 20px; font-weight: bold; color: #fff; text-decoration: none; }
+    nav .user { display: flex; align-items: center; gap: 16px; font-size: 14px; }
+    nav form { margin: 0; }
+    nav button { padding: 6px 14px; background: transparent; color: #fff; border: 1px solid #fff; border-radius: 6px; cursor: pointer; }
+    nav button:hover { background: rgba(255, 255, 255, 0.15); }
+    main { max-width: 700px; margin: 32px auto; padding: 0 20px; }
+    h1 { color: #1e3a5f; }
+    .card { background: #fff; border: 1px solid #d1d9e6; border-radius: 15px; box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08); padding: 28px; }
+    .field { display: flex; flex-direction: column; margin-bottom: 18px; }
+    .field label { margin-bottom: 6px; font-size: 14px; font-weight: bold; }
+    .field input, .field textarea { padding: 10px; border: 1px solid #b8c4d6; border-radius: 6px; font-size: 15px; font-family: inherit; }
+    .field textarea { min-height: 160px; resize: vertical; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: #2563eb; }
+    .field .invalid { border-color: #dc2626; }
+    .field-error { margin-top: 6px; color: #dc2626; font-size: 13px; }
+    .actions { display: flex; gap: 12px; align-items: center; }
+    .btn { padding: 10px 18px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .btn:hover { background: #1d4ed8; }
+    .cancel { color: #5b6b82; text-decoration: none; }
+    .cancel:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" th:href="@{/tickets}">Helpdesk</a>
+  <div class="user">
+    <span>Logged in as <strong sec:authentication="name"></strong></span>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Log out</button>
+    </form>
+  </div>
+</nav>
+
+<main>
+  <h1>New ticket</h1>
+
+  <div class="card">
+    <form th:action="@{/tickets}" th:object="${form}" method="post">
+
+      <div class="field">
+        <label for="title">Title</label>
+        <input type="text" id="title" th:field="*{title}" th:errorclass="invalid">
+        <span class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" th:field="*{description}" th:errorclass="invalid"></textarea>
+        <span class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn">Create ticket</button>
+        <a class="cancel" th:href="@{/tickets}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>
