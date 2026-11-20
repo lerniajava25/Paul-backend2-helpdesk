@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CreateCommentForm;
 import com.example.demo.dto.CreateTicketForm;
 import com.example.demo.model.Ticket;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.TicketService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -19,14 +21,16 @@ import java.util.List;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final CommentService commentService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, CommentService commentService) {
         this.ticketService = ticketService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
     public String index() {
-            return  "redirect:/tickets";
+        return "redirect:/tickets";
     }
 
 
@@ -44,7 +48,7 @@ public class TicketController {
     }
 
     @PostMapping("/tickets")
-    public String createTicket(@Valid @ModelAttribute("form")  CreateTicketForm form,
+    public String createTicket(@Valid @ModelAttribute("form") CreateTicketForm form,
                                BindingResult result,
                                Principal principal) {
         if (result.hasErrors()) {
@@ -59,6 +63,21 @@ public class TicketController {
     public String showTicket(@PathVariable Long id, Principal principal, Model model) {
         Ticket ticket = ticketService.getTicket(id, principal.getName());
         model.addAttribute("ticket", ticket);
+        model.addAttribute("comments", commentService.getComments(ticket));
+        model.addAttribute("commentForm", new CreateCommentForm());
         return "ticket-details";
+    }
+
+    @PostMapping("/tickets/{id}/comments")
+    public String addComment(@PathVariable Long id, @Valid @ModelAttribute("commentForm") CreateCommentForm form,
+                             BindingResult result, Principal principal, Model model) {
+        if (result.hasErrors()) {
+            Ticket ticket = ticketService.getTicket(id, principal.getName());
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("comments", commentService.getComments(ticket));
+            return "ticket-details";
+        }
+        commentService.addComment(id, form, principal.getName());
+        return "redirect:/tickets/{id}";
     }
 }
