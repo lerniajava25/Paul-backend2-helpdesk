@@ -26,21 +26,21 @@ The tables are created automatically by Hibernate when the application starts.
 
 The MySQL password is read from the environment variable `DB_PASSWORD` (the username is `root`).
 
-In IntelliJ: **Run → Edit Configurations → Environment variables** and add:
-
-```
-DB_PASSWORD=your_mysql_password
-```
+1. Click the dropdown next to **DemoApplication** (top right in IntelliJ) → **Edit Configurations...**
+2. In **Environment variables**, enter:
+   ```
+   DB_PASSWORD=your_mysql_password
+   ```
+   If the field is not visible: **Modify options → Environment variables**.
+3. Click **Apply** and **OK**.
 
 ### 3. Run the application
 
-Run `DemoApplication`, or from the terminal:
+Run `DemoApplication` with the green play button. When the console shows `Started DemoApplication`, open http://localhost:8080 in your browser.
 
-```bash
-./mvnw spring-boot:run
-```
+### Troubleshooting
 
-Open http://localhost:8080 in your browser.
+- **`Access denied for user 'root'@'localhost'`**: `DB_PASSWORD` is not set or the password is wrong. Check that the environment variable is saved in the run configuration (remember **Apply**).
 
 ## Test accounts
 
