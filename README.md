@@ -38,10 +38,6 @@ The MySQL password is read from the environment variable `DB_PASSWORD` (the user
 
 Run `DemoApplication` with the green play button. When the console shows `Started DemoApplication`, open http://localhost:8080 in your browser.
 
-### Troubleshooting
-
-- **`Access denied for user 'root'@'localhost'`**: `DB_PASSWORD` is not set or the password is wrong. Check that the environment variable is saved in the run configuration (remember **Apply**).
-
 ## Test accounts
 
 Created automatically on first start (when the users table is empty):
