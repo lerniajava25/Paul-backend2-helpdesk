@@ -6,25 +6,247 @@
     <meta charset="UTF-8">
     <title th:text="${ticket.title} + ' – Helpdesk'">Ticket – Helpdesk</title>
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; color: #1f2937; }
-        nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; background: #1e3a5f; color: #fff; }
-        nav .brand { font-size: 20px; font-weight: bold; color: #fff; text-decoration: none; }
-        nav .user { display: flex; align-items: center; gap: 16px; font-size: 14px; }
-        nav form { margin: 0; }
-        nav button { padding: 6px 14px; background: transparent; color: #fff; border: 1px solid #fff; border-radius: 6px; cursor: pointer; }
-        nav button:hover { background: rgba(255, 255, 255, 0.15); }
-        main { max-width: 800px; margin: 32px auto; padding: 0 20px; }
-        .back { color: #2563eb; text-decoration: none; font-size: 14px; }
-        .back:hover { text-decoration: underline; }
-        .title-row { display: flex; align-items: center; gap: 14px; }
-        h1 { color: #1e3a5f; margin: 12px 0; }
-        .status { padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; background: #e5eaf1; }
-        .card { background: #fff; border: 1px solid #d1d9e6; border-radius: 15px; box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08); padding: 24px 28px; margin-bottom: 20px; }
-        .meta { display: grid; grid-template-columns: 140px 1fr; row-gap: 10px; font-size: 14px; }
-        .meta dt { color: #5b6b82; font-weight: bold; }
-        .meta dd { margin: 0; }
-        h2 { font-size: 16px; color: #1e3a5f; margin-top: 0; }
-        .description { white-space: pre-wrap; line-height: 1.5; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 32px;
+            background: #1e3a5f;
+            color: #fff;
+        }
+
+        nav .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav .user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        nav form {
+            margin: 0;
+        }
+
+        nav button {
+            padding: 6px 14px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        h1 {
+            color: #1e3a5f;
+            margin: 12px 0;
+        }
+
+        .status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            background: #e5eaf1;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #d1d9e6;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08);
+            padding: 24px 28px;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            row-gap: 10px;
+            font-size: 14px;
+        }
+
+        .meta dt {
+            color: #5b6b82;
+            font-weight: bold;
+        }
+
+        .meta dd {
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #1e3a5f;
+            margin-top: 0;
+        }
+
+        .description {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .agent-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .agent-actions form {
+            margin: 0;
+        }
+
+        .assigned-to-me {
+            margin: 0;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .status-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-form label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-form select {
+            padding: 8px;
+            border: 1px solid #b8c4d6;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .no-comments {
+            color: #5b6b82;
+        }
+
+        .comment {
+            border-top: 1px solid #e5eaf1;
+            padding: 14px 0;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .comment-role {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #e5eaf1;
+            color: #5b6b82;
+        }
+
+        .comment-date {
+            color: #5b6b82;
+            margin-left: auto;
+        }
+
+        .comment-body {
+            margin: 8px 0 0;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #e5eaf1;
+        }
+
+        .comment-form label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .comment-form textarea {
+            min-height: 90px;
+            padding: 10px;
+            border: 1px solid #b8c4d6;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .comment-form .invalid {
+            border-color: #dc2626;
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 13px;
+        }
+
+        .btn {
+            align-self: flex-start;
+            padding: 10px 18px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
     </style>
 </head>
 <body>
@@ -63,12 +285,64 @@
         </dl>
     </div>
 
+    <div class="card" sec:authorize="hasAnyRole('AGENT', 'ADMIN')">
+        <h2>Agent actions</h2>
+
+        <div class="agent-actions">
+            <form th:action="@{/agent/tickets/{id}/assign(id=${ticket.id})}" method="post"
+                  th:if="${ticket.assignee == null or ticket.assignee.username != #authentication.name}">
+                <button type="submit" class="btn">Assign to me</button>
+            </form>
+            <p class="assigned-to-me"
+               th:if="${ticket.assignee != null and ticket.assignee.username == #authentication.name}">
+                This ticket is assigned to you
+            </p>
+
+            <form class="status-form" th:action="@{/agent/tickets/{id}/status(id=${ticket.id})}" method="post">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="NEW" th:selected="${ticket.status.name() == 'NEW'}">NEW</option>
+                    <option value="IN_PROGRESS" th:selected="${ticket.status.name() == 'IN_PROGRESS'}">IN_PROGRESS
+                    </option>
+                    <option value="WAITING_FOR_USER" th:selected="${ticket.status.name() == 'WAITING_FOR_USER'}">
+                        WAITING_FOR_USER
+                    </option>
+                    <option value="RESOLVED" th:selected="${ticket.status.name() == 'RESOLVED'}">RESOLVED</option>
+                    <option value="CLOSED" th:selected="${ticket.status.name() == 'CLOSED'}">CLOSED</option>
+                </select>
+                <button type="submit" class="btn">Update status</button>
+            </form>
+        </div>
+    </div>
+
     <div class="card">
         <h2>Description</h2>
         <p class="description" th:text="${ticket.description}"></p>
     </div>
 
-    <!-- Kommentarer läggs till här i nästa steg -->
+    <div class="card">
+        <h2 th:text="'Comments (' + ${comments.size()} + ')'">Comments</h2>
+
+        <p class="no-comments" th:if="${comments.isEmpty()}">No comments yet.</p>
+
+        <div class="comment" th:each="comment : ${comments}">
+            <div class="comment-header">
+                <strong th:text="${comment.author.username}"></strong>
+                <span class="comment-role" th:text="${comment.author.role}"></span>
+                <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+            <p class="comment-body" th:text="${comment.content}"></p>
+        </div>
+
+        <form class="comment-form" th:action="@{/tickets/{id}/comments(id=${ticket.id})}"
+              th:object="${commentForm}" method="post">
+            <label for="content">Add a comment</label>
+            <textarea id="content" th:field="*{content}" th:errorclass="invalid"
+                      placeholder="Write a comment..."></textarea>
+            <span class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+            <button type="submit" class="btn">Add comment</button>
+        </form>
+    </div>
 </main>
 
 </body>

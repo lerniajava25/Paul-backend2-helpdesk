@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.CreateTicketForm;
 import com.example.demo.model.Role;
 import com.example.demo.model.Ticket;
+import com.example.demo.model.TicketStatus;
 import com.example.demo.model.User;
 import com.example.demo.repository.TicketRepository;
 import com.example.demo.repository.UserRepository;
@@ -25,7 +26,7 @@ public class TicketService {
         this.userRepository = userRepository;
     }
 
-    public List<Ticket> getTicketsFor (String username) {
+    public List<Ticket> getTicketsFor(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
 
@@ -36,8 +37,8 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Ticket createTicket (CreateTicketForm form, String username) {
-        User user =  userRepository.findByUsername(username)
+    public Ticket createTicket(CreateTicketForm form, String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
         Ticket ticket = new Ticket();
         ticket.setTitle(form.getTitle());
@@ -45,13 +46,13 @@ public class TicketService {
 
         ticket.setCreator(user);
 
-        return  ticketRepository.save(ticket);
+        return ticketRepository.save(ticket);
     }
 
-    public Ticket getTicket(Long id,  String username) {
+    public Ticket getTicket(Long id, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
-        Ticket  ticket = ticketRepository.findById(id)
+        Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found: " + id));
 
         if (user.getRole() == Role.USER && !ticket.getCreator().getId().equals(user.getId())) {
@@ -59,5 +60,23 @@ public class TicketService {
         }
         return ticket;
 
+    }
+
+    public void assignToMe(Long id, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found: " + id));
+
+        ticket.setAssignee(user);
+        ticketRepository.save(ticket);
+    }
+
+    public void updateStatus(Long id, TicketStatus status) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found: " + id));
+
+        ticket.setStatus(status);
+        ticketRepository.save(ticket);
     }
 }
